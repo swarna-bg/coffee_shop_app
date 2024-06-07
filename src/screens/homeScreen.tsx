@@ -7,6 +7,7 @@ import {
   TextInput,
   FlatList,
   Dimensions,
+  ToastAndroid,
 } from 'react-native';
 import React, {useState, useRef} from 'react';
 import {useStore} from '../store/store';
@@ -41,9 +42,11 @@ const getCoffeeList = (category: string, data: any) => {
   }
 };
 
-const HomeScreen = ({navigation}:any) => {
+const HomeScreen = ({navigation}: any) => {
   const coffeeList = useStore((state: any) => state.CoffeeList);
   const beanList = useStore((state: any) => state.BeanList);
+  const addToCart = useStore((state: any) => state.addToCart);
+  const calculateCartPrice = useStore((state: any) => state.calculateCartPrice);
   const [categories, setCategories] = useState(
     getCategoryNameFromData(coffeeList),
   );
@@ -83,6 +86,34 @@ const HomeScreen = ({navigation}:any) => {
     setCategoryIndex({index: 0, category: categories[0]});
     setSortedData([...coffeeList]);
     setSearchText('');
+  };
+
+  const CoffeCardAddToCart = ({
+    id,
+    index,
+    name,
+    roasted,
+    imagelink_square,
+    special_ingredient,
+    type,
+    prices,
+  }: any) => {
+    addToCart({
+      id,
+      index,
+      name,
+      roasted,
+      imagelink_square,
+      special_ingredient,
+      type,
+      prices,
+    });
+    calculateCartPrice();
+    ToastAndroid.showWithGravity(
+      `${name} is Added to Cart`,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    );
   };
 
   return (
@@ -187,13 +218,14 @@ const HomeScreen = ({navigation}:any) => {
           contentContainerStyle={styles.FlatlistContainer}
           renderItem={({item}) => {
             return (
-              <TouchableOpacity  onPress={() => {
-                navigation.push('Details', {
-                  index: item.index,
-                  id: item.id,
-                  type: item.type,
-                });
-              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.push('Details', {
+                    index: item.index,
+                    id: item.id,
+                    type: item.type,
+                  });
+                }}>
                 <CoffeeBeanItem
                   id={item.id}
                   index={item.index}
@@ -204,7 +236,7 @@ const HomeScreen = ({navigation}:any) => {
                   special_ingredient={item.special_ingredient}
                   average_rating={item.average_rating}
                   price={item.prices[2]}
-                  buttonPressHandler={() => {}}
+                  buttonPressHandler={CoffeCardAddToCart}
                 />
               </TouchableOpacity>
             );
@@ -225,13 +257,14 @@ const HomeScreen = ({navigation}:any) => {
           ]}
           renderItem={({item}) => {
             return (
-              <TouchableOpacity  onPress={() => {
-                navigation.push('Details', {
-                  index: item.index,
-                  id: item.id,
-                  type: item.type,
-                });
-              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.push('Details', {
+                    index: item.index,
+                    id: item.id,
+                    type: item.type,
+                  });
+                }}>
                 <CoffeeBeanItem
                   id={item.id}
                   index={item.index}
@@ -242,7 +275,7 @@ const HomeScreen = ({navigation}:any) => {
                   special_ingredient={item.special_ingredient}
                   average_rating={item.average_rating}
                   price={item.prices[2]}
-                  buttonPressHandler={() => {}}
+                  buttonPressHandler={CoffeCardAddToCart}
                 />
               </TouchableOpacity>
             );

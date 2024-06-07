@@ -5,7 +5,7 @@ import {
   View,
   Dimensions,
   ImageProps,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
@@ -19,12 +19,12 @@ interface CoffeeItemProps {
   id: string;
   index: number;
   type: string;
-  name:string,
+  name: string;
   roasted: string;
   imagelink_square: ImageProps;
   special_ingredient: string;
   average_rating: number;
-  price: any  ;
+  price: any;
   buttonPressHandler: any;
 }
 
@@ -84,7 +84,7 @@ const CoffeeBeanItem: React.FC<CoffeeItemProps> = ({
             size={FONTSIZE.size_10}
           />
         </TouchableOpacity>
-        </View>
+      </View>
     </LinearGradient>
   );
 };
